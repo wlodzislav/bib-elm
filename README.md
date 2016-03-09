@@ -1,28 +1,30 @@
-# Elm - simple to use .createElement helper
+# Elm - Simple to use .createElement helper
 
 ## Example
 
-	var cancel = Elm({ tag: "button", class: "btn",
-		textContent: "Cancel",
-		onclick: function () { console.log("Cancel"); }
-	});
+```js
+var cancel = Elm({ tag: "button", class: "btn",
+	textContent: "Cancel",
+	onclick: function () { console.log("Cancel"); }
+});
 
-	var el = Elm({ tag: "span", class: "btn-group", children: [
-		{ tag: "button", class: "btn",
-			textContent: "Send",
-			onclick: function () { console.log("Send"); }
-		},
-		cancel // cancel is DOM node
-	]});
+var el = Elm({ tag: "span", class: "btn-group", children: [
+	{ tag: "button", class: "btn",
+		textContent: "Send",
+		onclick: function () { console.log("Send"); }
+	},
+	cancel // cancel is DOM node
+]});
 
-	// rerender
-	Elm({ tag: "span", class: "btn-group", children: [
-		{ tag: "button", class: "btn disabled", // change class
-			textContent: "Send",
-			onclick: function () { console.log("Send"); }
-		},
-		cancel // cancel doen't change
-	]}, el);
+// rerender
+Elm({ tag: "span", class: "btn-group", children: [
+	{ tag: "button", class: "btn disabled", // change class
+		textContent: "Send",
+		onclick: function () { console.log("Send"); }
+	},
+	cancel // cancel doen't change
+]}, el);
+```
 
 ## Elm(options, [node])
 
@@ -48,35 +50,43 @@ When rerendered all childrens properties and attributes are overwritten, if ther
 
 For example:
 
-	var el = Elm({ children: [
-		{ class: "task", textContent: "Task 1" },
-		{ class: "task", textContent: "Task 2" },
-		{ class: "task", textContent: "Task 3" }
-	]});
+```js
+var el = Elm({ children: [
+	{ class: "task", textContent: "Task 1" },
+	{ class: "task", textContent: "Task 2" },
+	{ class: "task", textContent: "Task 3" }
+]});
+```
 
 Mark second task done:
 
-	Elm({ children: [ // root left intact
-		{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
-		{ class: "task done", textContent: "Task 2" }, // `class`, `textContent` overwritten
-		{ class: "task", textContent: "Task 3" } // `class`, `textContent` overwritten
-	]}, el);
+```js
+Elm({ children: [ // root left intact
+	{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
+	{ class: "task done", textContent: "Task 2" }, // `class`, `textContent` overwritten
+	{ class: "task", textContent: "Task 3" } // `class`, `textContent` overwritten
+]}, el);
+```
 
 Then add task 4:
 
-	Elm({ children: [ // root left intact
-		{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
-		{ class: "task done", textContent: "Task 2" }, // `class`, `textContent` overwritten
-		{ class: "task", textContent: "Task 3" }, // `class`, `textContent` overwritten
-		{ class: "task", textContent: "Task 4" } // node created
-	]}, el);
+```js
+Elm({ children: [ // root left intact
+	{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
+	{ class: "task done", textContent: "Task 2" }, // `class`, `textContent` overwritten
+	{ class: "task", textContent: "Task 3" }, // `class`, `textContent` overwritten
+	{ class: "task", textContent: "Task 4" } // node created
+]}, el);
+```
 
 Remove task 2:
 
-	Elm({ children: [ // root left intact
-		{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
-		{ class: "task", textContent: "Task 3" }, // task 2 node, `class`, `textContent` overwritten
-		{ class: "task", textContent: "Task 4" } // task 3 node, `class`, `textContent` overwritten
-		// task 4 node removed
-	]}, el);
+```js
+Elm({ children: [ // root left intact
+	{ class: "task", textContent: "Task 1" }, // `class`, `textContent` overwritten
+	{ class: "task", textContent: "Task 3" }, // task 2 node, `class`, `textContent` overwritten
+	{ class: "task", textContent: "Task 4" } // task 3 node, `class`, `textContent` overwritten
+	// task 4 node removed
+]}, el);
+```
 
