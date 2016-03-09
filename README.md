@@ -40,7 +40,7 @@ Note! Root node tag couldn't be changed.
 
 `attributes` - object, all props are forced to be node attributes
 
-`children` - array of children, each child may be `options` object, DOM node, or any object with poroperty `.el` which is DOM node.
+`children` - array of children, each child may be `options` object, DOM node, any object with poroperty `.el` which is DOM node. If child is null/undefined it's ignored
 
 ## Rerending
 
