@@ -8,8 +8,8 @@ function Elm(options, el) {
 	for (var attribute in options) {
 		if (attribute === 'children') {
 			if (!options.children) {
-				while (el.children.length) {
-					el.removeChild(el.children[0]);
+				while (el.childNodes.length) {
+					el.removeChild(el.childNodes[0]);
 				}
 				continue;
 			}
@@ -21,25 +21,29 @@ function Elm(options, el) {
 					continue;
 				}
 
-				if (existing && el.children[j]) {
+				if (existing && el.childNodes[j]) {
 					if (child.nodeType > 0) {
-						if (child != el.children[j]) {
-							el.replaceChild(child, el.children[j]);
+						if (child != el.childNodes[j]) {
+							el.replaceChild(child, el.childNodes[j]);
 						}
 						j++;
 					} else if (child.el && child.el.nodeType > 0) {
-						if (child.el != el.children[j]) {
-							el.replaceChild(child.el, el.children[j]);
+						if (child.el != el.childNodes[j]) {
+							el.replaceChild(child.el, el.childNodes[j]);
 						}
+						j++;
+					} else if (typeof(child) == "string") {
+						var c = document.createTextNode(child);
+						el.replaceChild(c, el.childNodes[j]);
 						j++;
 					} else if (Array.isArray(child)) {
 						for (var p = 0, len2 = child.length; p < len2; p++) {
 							var c = child[p];
-							if (el.children[j]) {
-								if (el.children[j].tagName.toLowerCase() == (c.tag || "div")) {
-									Elm(el.children[j], c);
+							if (el.childNodes[j]) {
+								if (el.childNodes[j].tagName.toLowerCase() == (c.tag || "div")) {
+									Elm(c, el.childNodes[j]);
 								} else {
-									el.replaceChild(Elm(c), el.children[j]);
+									el.replaceChild(Elm(c), el.childNodes[j]);
 								}
 							} else {
 								el.appendChild(Elm(c));
@@ -47,10 +51,10 @@ function Elm(options, el) {
 							j++;
 						}
 					} else {
-						if (el.children[j].tagName.toLowerCase() == (child.tag || "div")) {
-							Elm(el.children[j], child);
+						if (el.childNodes[j].tagName && el.childNodes[j].tagName.toLowerCase() == (child.tag || "div")) {
+							Elm(child, el.childNodes[j]);
 						} else {
-							el.replaceChild(Elm(child), el.children[j]);
+							el.replaceChild(Elm(child), el.childNodes[j]);
 						}
 						j++;
 					}
@@ -61,6 +65,10 @@ function Elm(options, el) {
 						j++;
 					} else if (child.el && child.el.nodeType > 0) {
 						el.appendChild(child.el);
+						j++;
+					} else if (typeof(child) == "string") {
+						var c = document.createTextNode(child);
+						el.appendChild(c, el.childNodes[j]);
 						j++;
 					} else if (Array.isArray(child)) {
 						for (var p = 0, len2 = child.length; p < len2; p++) {
@@ -75,9 +83,9 @@ function Elm(options, el) {
 				}
 			}
 
-			if (existing && j < el.children.length) {
-				for (var i = 0, len = el.children.length - j; i < len; i++) {
-					el.removeChild(el.children[j]);
+			if (existing && j < el.childNodes.length) {
+				for (var i = 0, len = el.childNodes.length - j; i < len; i++) {
+					el.removeChild(el.childNodes[j]);
 				}
 			}
 
