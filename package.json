@@ -1,11 +1,10 @@
 {
   "name": "bib-elm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
+  "repository": "git://github.com/wlodzislav/bib-elm.git",
   "main": "elm.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "author": "Vladislav Kaminsky <wlodzislav@ya.ru>",
   "license": "MIT"
 }
