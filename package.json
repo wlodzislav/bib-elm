@@ -1,7 +1,7 @@
 {
   "name": "bib-elm",
-  "version": "0.1.1",
-  "description": "",
+  "version": "0.1.2",
+  "description": "Simple to use .createElement helper",
   "repository": "git://github.com/wlodzislav/bib-elm.git",
   "main": "elm.js",
   "scripts": {},
