@@ -1,13 +1,8 @@
-function Elm(/* [el,] options */) {
-	var el, options, existing
-	if (arguments.length == 1) {
-		options = arguments[0];
+function Elm(options, el) {
+	var existing = true;
+	if (el == null) {
 		el = document.createElement(options.tag || "div");
 		existing = false;
-	} else {
-		options = arguments[1];
-		el = arguments[0];
-		existing = true;
 	}
 
 	for (var attribute in options) {
