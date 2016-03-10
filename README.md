@@ -24,6 +24,15 @@ Elm({ tag: "span", class: "btn-group", children: [
 	},
 	cancel // cancel doen't change
 ]}, el);
+
+// or alternative syntax
+Elm({ tag: "span", attrs: { class: "btn-group" }, children: [
+	{ tag: "button", attrs: { class: "btn disabled",
+		textContent: "Send",
+		onclick: function () { console.log("Send"); }
+	}},
+	cancel // cancel doen't change
+]}, el);
 ```
 
 ## Elm(options, [node])
@@ -36,11 +45,11 @@ Note! Root node tag couldn't be changed.
 
 `tag` - tag, by default "div"
 
-`style` - string or object which sets inline style through node.style, `{ "fontSize": "10px" }`
-
-`attributes` - object, all props are forced to be node attributes
+`attrs` - object, attributes, properties for DOM node, including style object
 
 `children` - array of children, each child may be `options` object, DOM node, any object with poroperty `.el` which is DOM node, text string. If child is null/undefined it's ignored
+
+`style` - string or object which sets inline style through node.style, `{ "fontSize": "10px" }`
 
 ## Rerending
 
