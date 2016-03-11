@@ -43,6 +43,8 @@ Note! Root node tag couldn't be changed.
 
 `options` properties may be any DOM node properties or attributes, all unknown properties become node attributes
 
+Special properties of `options`:
+
 `tag` - tag, by default "div"
 
 `attrs` - object, attributes, properties for DOM node, including style object
@@ -50,6 +52,16 @@ Note! Root node tag couldn't be changed.
 `children` - array of children, each child may be `options` object, DOM node, any object with poroperty `.el` which is DOM node, text string. If child is null/undefined it's ignored
 
 `style` - string or object which sets inline style through node.style, `{ "fontSize": "10px" }`
+
+`beforeCreate` - function/array of `function(options)` which is called with current options before DOM node is rendered
+
+`afterCreate` - function/array of `function(el)`, called after DOM node created
+
+`beforeRemove` - function/array of `function(el)`, called before DOM node is removed
+
+`remove` - function/array of `function(el)`, removes DOM node
+
+`afterRemove` - function/array of `function(el)`, called after DOM node is removed, ignored when `remove` specified
 
 ## Rerending
 
