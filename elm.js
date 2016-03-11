@@ -5,6 +5,10 @@ function Elm(options, el) {
 		existing = false;
 	}
 
+	if (options.create) {
+		return options.create(options.attrs, options.children);
+	}
+
 	if (options.children) {
 		for (var i = 0, j = 0, len = options.children.length; i < len; i++) {
 			var child = options.children[i];
