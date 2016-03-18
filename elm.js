@@ -47,6 +47,7 @@ function Elm(options, el) {
 
 		for (var i = 0, j = 0, len = options.children.length; i < len; i++) {
 			var child = options.children[i];
+			var removingChild;
 
 			if (!child) {
 				continue;
@@ -56,17 +57,23 @@ function Elm(options, el) {
 			if (existing && el.childNodes[j]) {
 				if (child.nodeType > 0) {
 					if (child != el.childNodes[j]) {
+						removingChild = el.childNodes[j];
 						el.replaceChild(child, el.childNodes[j]);
+						Elm.removeRecursive(removingChild);
 					}
 					j++;
 				} else if (child.el && child.el.nodeType > 0) {
 					if (child.el != el.childNodes[j]) {
+						removingChild = el.childNodes[j];
 						el.replaceChild(child.el, el.childNodes[j]);
+						Elm.removeRecursive(removingChild);
 					}
 					j++;
 				} else if (typeof(child) == "string") {
 					var c = document.createTextNode(child);
+					removingChild = el.childNodes[j];
 					el.replaceChild(c, el.childNodes[j]);
+					Elm.removeRecursive(removingChild);
 					j++;
 				} else if (Array.isArray(child)) {
 					for (var p = 0, len2 = child.length; p < len2; p++) {
@@ -75,7 +82,9 @@ function Elm(options, el) {
 							if (el.childNodes[j].tagName.toLowerCase() == (c.tag || "div")) {
 								Elm(c, el.childNodes[j]);
 							} else {
+								removingChild = el.childNodes[j];
 								el.replaceChild(Elm(c), el.childNodes[j]);
+								Elm.removeRecursive(removingChild);
 							}
 						} else {
 							el.appendChild(Elm(c));
@@ -86,7 +95,9 @@ function Elm(options, el) {
 					if (el.childNodes[j].tagName && el.childNodes[j].tagName.toLowerCase() == (child.tag || "div")) {
 						Elm(child, el.childNodes[j]);
 					} else {
+						removingChild = el.childNodes[j];
 						el.replaceChild(Elm(child), el.childNodes[j]);
+						Elm.removeRecursive(removingChild);
 					}
 					j++;
 				}
@@ -120,41 +131,7 @@ function Elm(options, el) {
 		if (existing && j < el.childNodes.length) {
 			for (var i = 0, len = el.childNodes.length - j; i < len; i++) {
 				var c = el.childNodes[j];
-
-				// HOOK: beforeRemove
-				if (c.__elm_beforeRemove) {
-					if (Array.isArray(c.__elm_beforeRemove)) {
-						for (var m = 0; m < c.__elm_beforeRemove.length; m++) {
-							c.__elm_beforeRemove[m](c);
-						}
-					} else {
-						c.__elm_beforeRemove(c);
-					}
-				}
-
-				// HOOK: remove
-				if (c.__elm_remove) {
-					if (Array.isArray(c.__elm_remove)) {
-						for (var m = 0; m < c.__elm_remove.length; m++) {
-							c.__elm_remove[m](c);
-						}
-					} else {
-						c.__elm_remove(c);
-					}
-				} else {
-					el.removeChild(c);
-
-					// HOOK: afterRemove
-					if (c.__elm_afterRemove) {
-						if (Array.isArray(c.__elm_afterRemove)) {
-							for (var m = 0; m < c.__elm_afterRemove.length; m++) {
-								c.__elm_afterRemove[m](c);
-							}
-						} else {
-							c.__elm_afterRemove(c);
-						}
-					}
-				}
+				Elm.removeRecursive(c);
 			}
 		}
 
@@ -231,3 +208,48 @@ if (typeof module == 'object' && module.exports) {
 } else {
 	window.Elm = Elm;
 }
+
+Elm.removeRecursive = function (c) {
+	// HOOK: beforeRemove
+	if (c.__elm_beforeRemove) {
+		if (Array.isArray(c.__elm_beforeRemove)) {
+			for (var m = 0; m < c.__elm_beforeRemove.length; m++) {
+				c.__elm_beforeRemove[m](c);
+			}
+		} else {
+			c.__elm_beforeRemove(c);
+		}
+	}
+
+	if (c.children && c.children.length != 0) {
+		for (var m = 0; m < c.children.length; m++) {
+			Elm.removeRecursive(c.children[m]);
+		}
+	}
+
+	// HOOK: remove
+	if (c.__elm_remove) {
+		if (Array.isArray(c.__elm_remove)) {
+			for (var m = 0; m < c.__elm_remove.length; m++) {
+				c.__elm_remove[m](c);
+			}
+		} else {
+			c.__elm_remove(c);
+		}
+	} else {
+		if (c.parentNode) {
+			c.parentNode.removeChild(c);
+		}
+
+		// HOOK: afterRemove
+		if (c.__elm_afterRemove) {
+			if (Array.isArray(c.__elm_afterRemove)) {
+				for (var m = 0; m < c.__elm_afterRemove.length; m++) {
+					c.__elm_afterRemove[m](c);
+				}
+			} else {
+				c.__elm_afterRemove(c);
+			}
+		}
+	}
+};
